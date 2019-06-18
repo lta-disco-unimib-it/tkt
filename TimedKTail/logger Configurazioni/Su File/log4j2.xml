@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN">
+
+ 
+	<appender name="console" target="SYSTEM_OUT">
+	    <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} @ %msg%n"/>
+	</appender>
+ 
+   <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
+      <param name="append" value="false"/>
+      <param name="file" value="log/ultimo.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+	
+	<Loggers>
+		<Logger name="Su console" level="trace">
+		  <AppenderRef ref="Console"/>
+		</Logger>
+		<Root level="warn">
+		  <AppenderRef ref="Console"/>
+		</Root>
+		<Root level="warn">
+			<AppenderRef ref="file"/>
+		</Root>
+  </Loggers>
+ 
+</Configuration>

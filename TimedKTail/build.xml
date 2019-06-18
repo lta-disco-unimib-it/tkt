@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project TimedKTail">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="build"/>
+    <property name="dir.workspace" value="/Users/fabrizio/Workspaces/workspaceTimedKTail"/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/tktail.jar" filesetmanifest="mergewithoutmain">
+            
+            <fileset dir="bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Apache.Commons/commons-io-2.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-algo-1.3-javadoc.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-algo-1.3-sources.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-algo-1.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-core-1.3-javadoc.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-core-1.3-sources.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-core-1.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-ui-1.3-javadoc.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-ui-1.3-sources.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/gs/gs-ui-1.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/collections-generic-4.01.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/jung-api-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/jung-algorithms-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/jung-graph-impl-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/jung-visualization-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Jung/jung-samples-2.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/log4j/log4j-1.2-api-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/log4j/log4j-api-2.2-javadoc.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/log4j/log4j-api-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/log4j/log4j-core-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/fabrizio/LTA-GIT/LEARN-ModelGeneration/software/TimedKTail/TimedKTail/lib/Apache.Commons/commons-math3-3.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse-4.5.app/Contents/Eclipse/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Applications/Eclipse-4.5.app/Contents/Eclipse/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+        </jar>
+    </target>
+</project>

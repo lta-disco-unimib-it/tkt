@@ -1,0 +1,14 @@
+15:07:18.300 [main] INFO  it.unimib.disco.lta.timedKTail.traces.ObserverValidateTrace @ Inizio processo di validazione traccia n: 1
+15:07:18.301 [main] FATAL Validation.Validation @ Traccia Errata!
+15:07:18.301 [main] FATAL Validation.Validation @ Report Errore
+15:07:18.301 [main] FATAL Validation.Validation @ Riga traccia errore Finale: 5
+Evento Non verificato! 
+Traccia non match con Automa
+Evento Traccia: 
+   attivita': C 
+   tipologia: E 
+Eventi accettatai:; 
+    A B     (0 -> 1) 
+    H B     (1 -> 2) 
+    H E     (2 -> 3) 
+    C B     (3 -> 4) 
