@@ -6,6 +6,7 @@ The TKT tool provides two main functionalities:
 
 Following instructions are expected to be executed inside folder "Example1"
 
+0) Copy the tkt.jar file inside the current folder or create a symbolic link.
 
 1) Infer a timed automata model
 
