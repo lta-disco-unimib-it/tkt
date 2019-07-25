@@ -17,3 +17,7 @@ Folder releases contain pre-compiled versions of TkT, along with zipped tutorial
 
 Folder TkTTutorial (https://github.com/lta-disco-unimib-it/tkt/tree/master/TimedKTail/TKTTutorial) contains the source of the tutorial 
 
+## Case studies
+
+Compressed folders to replicate the results presented in our papers are available at the following URL https://drive.google.com/open?id=1HOSRLASPz9--U3rEGgeyP_OvrInmX6gP
+
