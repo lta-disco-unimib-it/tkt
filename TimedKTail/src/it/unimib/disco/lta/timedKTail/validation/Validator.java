@@ -454,7 +454,7 @@ public abstract class Validator {
 		}
 		
 		
-		tabError = eType.name()+ COL_SEPARATOR + state + COL_SEPARATOR + e.getAttivita() + COL_SEPARATOR + e.getTimestamp() + COL_SEPARATOR + clocks + COL_SEPARATOR + clause + COL_SEPARATOR + violatingValueStr;
+		tabError = eType.name()+ COL_SEPARATOR + state + COL_SEPARATOR + e.getAttivita()+":"+e.getTipologia() + COL_SEPARATOR + e.getTimestamp() + COL_SEPARATOR + clocks + COL_SEPARATOR + clause + COL_SEPARATOR + violatingValueStr;
 		return tabError;
 	}
 

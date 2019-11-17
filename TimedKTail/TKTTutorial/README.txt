@@ -57,17 +57,17 @@ The command produces the following output
 	[Trace path:validTraces/trace3.csv traceN:1]
 	Invalid traces (0) :
 
-The command also generate a .csv file (TkT.validationResults.csv) containing the list of violations and violating event in tabular format.
+The command also generates a .csv file (i.e., "TkT.validationResults.csv") containing the list of violations and violating event in tabular format.
 The file contains the following columns:
 TracePath	indicates the path of the trace
 IsMainError	indicate if teh error reported is the main error (i.e, the error on the longest accepted trace)
 ErrorType	it can be VIOLATED_GUARD, UNMATCHED_EVENT, MISSING_CLOCK (i.e., cannot find the clock for one of the guard conditions), NOT_FINAL (termination not in a final state)
 CurrentState	state in which the violation occurred
-ViolatingEvent	event that lead to the violation
+ViolatingEvent	event that lead to the violation (followed by ":B" or ":E", based on the type of event)
 EventTimestamp	original timestamp in the event 
 MissingClocks	in case of violation of type MISSING_CLOCK indicate the list of all the clocks in the guard conditions
-ViolatedClauseInGuardCondition	in case of VIOLATED_GUARD, the text of teh violated guard
-ViolatingClockValue	the (normalized) clock value that violated teh guard
+ViolatedClauseInGuardCondition	in case of VIOLATED_GUARD, the text of the violated guard
+ViolatingClockValue	the (normalized) clock value that violated the guard
 
 
 
