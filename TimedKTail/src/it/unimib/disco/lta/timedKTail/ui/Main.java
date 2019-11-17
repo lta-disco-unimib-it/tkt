@@ -19,6 +19,7 @@ import it.unimib.disco.lta.timedKTail.traces.Parser;
 import it.unimib.disco.lta.timedKTail.traces.Trace;
 import it.unimib.disco.lta.timedKTail.util.JavaRunner;
 import it.unimib.disco.lta.timedKTail.validation.Validation;
+import it.unimib.disco.lta.timedKTail.validation.Validator;
 import it.unimib.disco.lta.timedKTail.validation.Validation.ValidationError;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -52,6 +54,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 import javax.swing.JFrame;
 
@@ -99,7 +102,7 @@ public class Main {
 
 	private static final Logger logger = LogManager.getLogger(Main.class);
 	private static FileWriter fw;
-	private static boolean showOtherErrors = Boolean.valueOf( System.getProperty("showOtherErrors", "true") );
+	private static boolean showOtherErrors = Boolean.valueOf( System.getProperty("showOtherErrors", "false") );
 	
 	
 	private enum policyMultivalOptions { MinMax, Gamma } 
@@ -121,8 +124,9 @@ public class Main {
 		saveAutomata(ta,getDefaultAutomataPath(ta, destFolder));
 
 		if ( fTraceValidation != null ){
+			PrintWriter pw = new PrintWriter(System.out);
 			//validazione tracce
-			validateTrace(ta, fTraceValidation,true,false,true);
+			validateTrace(ta, fTraceValidation,null,true,false, true, pw );
 			//drawGraph1(ta,"Stadio2"+"path: "+fTraces);
 			//saveAutomata(ta, pathSaveTA);
 			//drawGraph1(loadAutomata(),"caricatoFILE");
@@ -221,8 +225,8 @@ public class Main {
 		System.out.println("Numero Nodi: "+nNode);
 	}
 
-	public static void validateTrace(TimedAutomata ta,String validationFolderPath, boolean validateAbsoluteClocks,
-			boolean checkForGuardsNotReset, boolean checkGuards){
+	public static void validateTrace(TimedAutomata ta,String validationFolderPath, File validationResultFile,
+			boolean validateAbsoluteClocks, boolean checkForGuardsNotReset, boolean checkGuards, PrintWriter SYSOUT){
 		
 		
 		boolean useMethodExcutionTime  = Boolean.parseBoolean(System.getProperty("useMethodExcutionTime", "false"));
@@ -246,39 +250,90 @@ public class Main {
 		
 		List<Trace> valid = oValidate.getValidTraces();
 		List<Trace> invalid = oValidate.getInvalidTraces();
+		
+		BufferedWriter validationResultBuffer = null;
+		if ( validationResultFile != null ){
+			try {
+				validationResultBuffer = new BufferedWriter( new FileWriter(validationResultFile) );
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		
-		System.out.println("==== TRACES VALIDATION RESULTS ==== " );
+		SYSOUT.println("==== TRACES VALIDATION RESULTS ==== " );
+		
+		if ( validationResultBuffer != null ){
+			try {
+				validationResultBuffer.write("TracePath"+Validator.getCOL_SEPARATOR()+"IsMainError"+Validator.getCOL_SEPARATOR()+
+						"ErrorType"+ Validator.getCOL_SEPARATOR() + "CurrentState" + Validator.getCOL_SEPARATOR() + "ViolatingEvent" + Validator.getCOL_SEPARATOR() + "EventTimestamp" + Validator.getCOL_SEPARATOR() + "MissingClocks" + Validator.getCOL_SEPARATOR() + "ViolatedClauseInGuardCondition" + Validator.getCOL_SEPARATOR() + "ViolatingClockValue" );
+				validationResultBuffer.newLine();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 		for ( Trace t : invalid ){
-			System.out.println("Trace : "+t.getFilePath() );
+			SYSOUT.println("Trace : "+t.getFilePath() );
 			
-			System.out.println("Main error: ");
+			SYSOUT.println("Main error: ");
 			ValidationError e = oValidate.getError(t);
-			printErrorDetails(t, e);
+			printErrorDetails(SYSOUT, t, e);
+			
+			
+			
+			
+			if ( validationResultBuffer != null ){
+				saveErrorDetails(validationResultBuffer,t, e, true);
+			}
 			
 			if ( showOtherErrors ){
-				System.out.println("Other errors: ");
+				SYSOUT.println("Other errors: ");
 				for ( ValidationError oe : oValidate.getErrors(t) ){
-					printErrorDetails(t, oe);	
+					printErrorDetails(SYSOUT, t, oe);
+					if ( validationResultBuffer != null ){
+						saveErrorDetails(validationResultBuffer, t, e, false);
+					}
 				}
 			}
 		}
 		
-		System.out.println("Valid traces ("+valid.size()+") :" );
-		for ( Trace t : valid ){
-			System.out.println(t);
+		if ( validationResultBuffer != null ){
+			try {
+				validationResultBuffer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
-		System.out.println("Invalid traces ("+invalid.size()+") :" );
+		SYSOUT.println("Valid traces ("+valid.size()+") :" );
+		for ( Trace t : valid ){
+			SYSOUT.println(t);
+		}
+		
+		SYSOUT.println("Invalid traces ("+invalid.size()+") :" );
 		for ( Trace t : invalid ){
-			System.out.println(t+" "+oValidate.getError(t).getErrorType());
+			SYSOUT.println(t+" "+oValidate.getError(t).getErrorType());
 		}
 	}
 
-	public static void printErrorDetails(Trace t, ValidationError e) {
-		System.out.println(t+" event#:"+e.getLine()+" "+e.getErrorType());
-		System.out.println(e.getMsg());
-		System.out.println("\n");
+	private static void saveErrorDetails(BufferedWriter validationResultBuffer, Trace t, ValidationError e, boolean mainError) {
+		try {
+			validationResultBuffer.write(t.getFilePath()+Validator.getCOL_SEPARATOR()+mainError+Validator.getCOL_SEPARATOR()+e.getTabMsg());
+			validationResultBuffer.newLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	public static void printErrorDetails(PrintWriter SYSOUT, Trace t, ValidationError e) {
+		SYSOUT.println(t+" event#:"+e.getLine()+" "+e.getErrorType());
+		SYSOUT.println(e.getMsg());
+		SYSOUT.println("\n");
 	}
 
 	public static void drawGraph1(TimedAutomata ta,String name){

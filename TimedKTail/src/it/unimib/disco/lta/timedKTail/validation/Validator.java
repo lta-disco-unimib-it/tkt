@@ -23,6 +23,17 @@ import it.unimib.disco.lta.timedKTail.validation.Validation.ValidationError;
 import it.unimib.disco.lta.timedKTail.validation.Validation.ValidationError.ErrorType;
 
 public abstract class Validator {
+	
+	private static char COL_SEPARATOR = ',';
+	
+
+	public static char getCOL_SEPARATOR() {
+		return COL_SEPARATOR;
+	}
+
+	public static void setCOL_SEPARATOR(char cOL_SEPARATOR) {
+		COL_SEPARATOR = cOL_SEPARATOR;
+	}
 
 	private static final Logger logger = LogManager.getLogger(Validator.class);
 	private boolean validateAbsoluteClocks;
@@ -76,6 +87,9 @@ public abstract class Validator {
 
 	private ValidationError buildViolatedGuardError(Event e, Transition t, Clause clauseErrata, long valoreConfronto, LinkedList<Pair<Event, Transition>> traceClock, int line) {
 		String errore = "";
+		String tabError = "";
+		
+		ErrorType eType = ErrorType.VIOLATED_GUARD;
 
 		if ( recordErrorMessage ){
 			errore="Violated guard \n"
@@ -90,11 +104,13 @@ public abstract class Validator {
 
 
 			if ( recordInvalidTraces ){
-				errore += "Eventi processati: \n" + printVisitedTrace(traceClock);
+				errore += "Processed Events: \n" + printVisitedTrace(traceClock);
 			}
+			
+			tabError=generateTabErrorMessage(e, traceClock, eType, clauseErrata, valoreConfronto);
 		}
 
-		ValidationError ve = new ValidationError(ErrorType.VIOLATED_GUARD, e.getAttivita(), errore, line);
+		ValidationError ve = new ValidationError(eType, e.getAttivita(), errore, tabError, line);
 		ve.clause = clauseErrata;
 		ve.actualValue = valoreConfronto;
 		
@@ -102,6 +118,8 @@ public abstract class Validator {
 	}
 
 
+
+	
 
 	public void aggiungiElementoLocalTrace(Transition t, Event e, List<Pair<Event,Transition>> traceClock){
 		e.setFiredTransition( t );
@@ -380,7 +398,9 @@ public abstract class Validator {
 
 	protected ValidationError buildNotAcceptedEventError(Event e, List<Pair<Event, Transition>> traceClock, int line) {
 		String errore = "";
-
+		String tabError = "";
+		ErrorType eType = ErrorType.UNMATCHED_EVENT;
+		
 		if ( recordErrorMessage ){
 			errore="Invalid event \n"
 					+ "Event details: \n"
@@ -390,14 +410,59 @@ public abstract class Validator {
 			if( recordInvalidTraces ){
 				errore += "Processed events: \n" + printVisitedTrace(traceClock);
 			}
-		}
+			
+			tabError = generateTabErrorMessage(e, traceClock, eType);
 
-		return new ValidationError(ErrorType.UNMATCHED_EVENT, e.getAttivita(), errore, line);
+		}
+		
+		return new ValidationError(eType, e.getAttivita(), errore, tabError, line);
+	}
+	
+	private String generateTabErrorMessage(Event e, LinkedList<Pair<Event, Transition>> traceClock, ErrorType eType,
+			Clause violatedClause, long violatingValue) {
+		
+		return generateTabErrorMessage(e, traceClock, eType, "", violatedClause, violatingValue);
+	}
+
+	private String generateTabErrorMessage(Event e, List<Pair<Event, Transition>> traceClock, ErrorType eType) {
+		return generateTabErrorMessage(e, traceClock, eType, "");
+	}
+	
+	private String generateTabErrorMessage(Event e, List<Pair<Event, Transition>> traceClock, ErrorType eType,
+			String clocks) {
+		return generateTabErrorMessage(e, traceClock, eType, clocks, null, 0);
+	}
+		
+		private String generateTabErrorMessage(Event e, List<Pair<Event, Transition>> traceClock, ErrorType eType,
+				String clocks, Clause violatedClause, long violatingValue) {
+	
+		String tabError;
+		String state;
+		int last = traceClock.size() - 1;
+		if ( last < 0 ){
+			state = timedAutomaton.getNodeInit().toString();;
+		} else {
+			state = traceClock.get( last ).getVal2().getNodeTo().toString();
+		}
+		
+		String clause = "";
+		String violatingValueStr = "";
+		
+		if ( violatedClause != null ){
+			clause=violatedClause.toString();
+			violatingValueStr = ""+violatingValue;
+		}
+		
+		
+		tabError = eType.name()+ COL_SEPARATOR + state + COL_SEPARATOR + e.getAttivita() + COL_SEPARATOR + e.getTimestamp() + COL_SEPARATOR + clocks + COL_SEPARATOR + clause + COL_SEPARATOR + violatingValueStr;
+		return tabError;
 	}
 
 	protected ValidationError buildNonFinalStateError(Event e, List<Pair<Event, Transition>> traceClock, int line) {
 		String errore = "";
-
+		String tabError = "";
+		ErrorType eType = ErrorType.NOT_FINAL;
+		
 		if ( recordErrorMessage ){
 			errore="Trace terminates in a non-final state \n"
 					+ "Event details: \n"
@@ -407,22 +472,25 @@ public abstract class Validator {
 			if( recordInvalidTraces ){
 				errore += "Matching trace: \n" + printVisitedTrace(traceClock);
 			}
+			
+			tabError = generateTabErrorMessage(e, traceClock, eType);
 		}
 
-		return new ValidationError(ErrorType.NOT_FINAL, e.getAttivita(), errore, line);
+		return new ValidationError(eType, e.getAttivita(), errore, tabError, line);
 	}
 
 	private ValidationError buildMissingClockError(Event e, Transition t, List<Pair<Event, Transition>> traceClock, int line, Collection<Clock> clocksToFind) {
-
+		ErrorType eType = ErrorType.MISSING_CLOCK;
 		String clocks = "";
 
 
 		for ( Clock c : clocksToFind ){
-			clocks += c.getId()+",";
+			clocks += c.getId()+":";
 		}
 
 
 		String errore = "";
+		String tabError = "";
 		if ( recordErrorMessage ){
 			errore="Missing clock \n"
 					+ "Event details: \n"
@@ -438,10 +506,14 @@ public abstract class Validator {
 			if( recordInvalidTraces ){
 				errore += "Processed events: \n" + printVisitedTrace(traceClock);
 			}
+			
+			tabError = generateTabErrorMessage(e, traceClock, eType, clocks);
 		}
 
-		return new ValidationError(ErrorType.MISSING_CLOCK, e.getAttivita(), errore, line);
+		return new ValidationError(eType, e.getAttivita(), errore, tabError, line);
 	}
+
+	
 
 	private String printVisitedTrace(
 			List<Pair<Event, Transition>> traceClock ) {

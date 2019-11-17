@@ -9,6 +9,8 @@ import static it.unimib.disco.lta.timedKTail.ui.Main.drawGraph1;
 import static it.unimib.disco.lta.timedKTail.ui.Main.loadAutomata;
 import static it.unimib.disco.lta.timedKTail.ui.Main.validateTrace;
 
+import java.io.PrintWriter;
+
 import it.unimib.disco.lta.timedKTail.JTMTime.TimedAutomata;
 
 /**
@@ -30,7 +32,9 @@ public class VisualizeAutomata {
     	drawGraph1(ta,"Stadio2");
         
     	if ( validationFolder != null){
-    		validateTrace(ta,validationFolder,true,false,true);
+    		PrintWriter pw = new PrintWriter(System.out);
+    		validateTrace(ta,validationFolder,null,true,false, true, pw);
+    		pw.close();
     	}
         
     }

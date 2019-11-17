@@ -3,9 +3,8 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <!--define folder properties-->
-    <property name="dir.buildfile" value="build"/>
-    <property name="dir.workspace" value="/Users/fabrizio/Workspaces/workspaceTimedKTail"/>
-    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    
+    <property name="dir.jarfile" value="build"/>
     <target name="create_run_jar">
         <jar destfile="${dir.jarfile}/tktail.jar" filesetmanifest="mergewithoutmain">
             

@@ -97,19 +97,29 @@ public class Validation {
 		public long actualValue;
 		private boolean firstErrorOfSequence = true;
 		private ArrayList<ValidationError> errorSequence;
+		private String tabMsg;
 
 	
+
+		public String getTabMsg() {
+			return tabMsg;
+		}
 
 		@Override
 		public String toString() {
 			return "[ first"+firstErrorOfSequence+"; "+et+"; "+line+"; "+clause+"; "+activity+" ]";
 		}
-
+		
 		public ValidationError( ErrorType et, String activity, String msg, int line ){
+			this(et, activity, msg, "", line);
+		}
+
+		public ValidationError( ErrorType et, String activity, String msg, String tabMsg, int line ){
 			this.et = et;
 			this.msg = msg;
 			this.line = line;
 			this.activity = activity;
+			this.tabMsg = tabMsg;
 		}
 
 		public int getLine() {

@@ -18,7 +18,7 @@ Execute the following command from console:
 
  
 Execute the following command from console:
-java -Dtkt.policy.inferAbsoluteClocks=false -cp tkt.jar it.unimib.disco.lta.timedKTail.ui.InferModel TA.jtml validTraces/
+java -Dtkt.policy.deriveGlobalClock=false -cp tkt.jar it.unimib.disco.lta.timedKTail.ui.InferModel TA.jtml validTraces/
 
 
 
@@ -57,8 +57,23 @@ The command produces the following output
 	[Trace path:validTraces/trace3.csv traceN:1]
 	Invalid traces (0) :
 
+The command also generate a .csv file (TkT.validationResults.csv) containing the list of violations and violating event in tabular format.
+The file contains the following columns:
+TracePath	indicates the path of the trace
+IsMainError	indicate if teh error reported is the main error (i.e, the error on the longest accepted trace)
+ErrorType	it can be VIOLATED_GUARD, UNMATCHED_EVENT, MISSING_CLOCK (i.e., cannot find the clock for one of the guard conditions), NOT_FINAL (termination not in a final state)
+CurrentState	state in which the violation occurred
+ViolatingEvent	event that lead to the violation
+EventTimestamp	original timestamp in the event 
+MissingClocks	in case of violation of type MISSING_CLOCK indicate the list of all the clocks in the guard conditions
+ViolatedClauseInGuardCondition	in case of VIOLATED_GUARD, the text of teh violated guard
+ViolatingClockValue	the (normalized) clock value that violated teh guard
 
 
+
+A list of options to control trace validation can be inspected by exectuting VaidateTraces without any parameter.
+	"java -cp tkt.jar it.unimib.disco.lta.timedKTail.ui.ValidateTraces"
+	
 
 2.2a) Case 2a: an event timestamp violates a guard condition  
 In this example we compare a single trace against the model. The following example shows that TKTAIL is able to detect 
