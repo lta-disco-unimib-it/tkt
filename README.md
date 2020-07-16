@@ -9,6 +9,16 @@ Interestingly, the timing behavior is strongly dependent on the functional behav
 
 The Timed k-Tail (TkT) specification mining technique, addresses the challenge of generating models that capture both the functional and timing behavior of a software system from execution traces.  TkT can mine finite state models that capture such an interplay: the functional behavior is represented by the possible order of the events accepted by the transitions, while the timing behavior is represented through clocks and clock constraints of different nature associated to transitions.
 
+## Publications
+
+TkT has been presented in the following publications
+
+F. Pastore, D. Micucci and L. Mariani, "Timed k-Tail: Automatic Inference of Timed Automata," 2017 IEEE International Conference on Software Testing, Verification and Validation (ICST), Tokyo, 2017, pp. 401-411, doi: 10.1109/ICST.2017.43. https://ieeexplore.ieee.org/document/7927993
+
+F. Pastore, D. Micucci, M. Guzman and L. Mariani, "TkT: Automatic Inference of Timed and Extended Pushdown Automata," in IEEE Transactions on Software Engineering, doi: 10.1109/TSE.2020.2998527. https://ieeexplore.ieee.org/document/9103630
+
+
+
 ## Download and use
 
 Folder TimedKTail (https://github.com/lta-disco-unimib-it/tkt/tree/master/TimedKTail) contains the source code of TkT.
